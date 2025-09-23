@@ -11,9 +11,9 @@ def main():
 
     # 步骤1: 加载并合并数据
     print("步骤1: 加载并合并Excel数据")
-    df_features = pd.read_excel('PR_features.xlsx')
-    df_info = pd.read_excel('PR_info.xlsx')
-    df_author = pd.read_excel('author_features.xlsx')
+    df_features = pd.read_excel('data/PR_features.xlsx')
+    df_info = pd.read_excel('data/PR_info.xlsx')
+    df_author = pd.read_excel('data/author_features.xlsx')
     df = df_info.merge(df_features, on='number', how='left')
     df = df.merge(df_author, on='number', how='left')
 
