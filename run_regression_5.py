@@ -8,6 +8,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 指定中文字体
+plt.rcParams['axes.unicode_minus'] = False             # 正常显示负号
+
 def run_regression_task(df, features):
     """
     运行回归任务：预测PR处理时间
