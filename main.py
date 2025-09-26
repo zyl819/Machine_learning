@@ -79,8 +79,12 @@ def main():
                     pr_df_clean.to_csv(clean_path_csv, index=False)
                     X_features.to_csv(feat_path_csv)
             else:
-                print("已检测到本地 clean/features 文件，直接加载用于实验")
-
+                print("已检测到本地 clean/features 文件，重新预处理确保时间类型正确")
+                # 强制重新预处理，确保时间列转换为 datetime
+                pr_df_clean = preprocess_data(pr_df_clean)
+                X_features = extract_features_from_excel(pr_df_clean)
+                print("预处理后的原始数据预览：")
+                print("字段名：", pr_df_clean.columns.tolist())
             print("\n步骤4: 运行机器学习任务")
             reg_results = run_regression_task(pr_df_clean, X_features)
             clf_results = run_classification_task(pr_df_clean, X_features)
@@ -114,7 +118,6 @@ def main():
             all_results.append(repo_metrics)
 
         print("\n多仓库实验完成！")
-        return
 
     # 传统Excel路径
     print("步骤1: 加载并合并Excel数据")
