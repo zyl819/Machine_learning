@@ -1,0 +1,12 @@
+repo: sharkdp/fd
+[Regression]
+X_test_shape: (124, 38)
+y_test_size: 124
+
+[Classification]
+accuracy: 0.83125
+train_size: 640
+test_size: 160
+positive_ratio_train: 0.828125
+positive_ratio_test: 0.825
+

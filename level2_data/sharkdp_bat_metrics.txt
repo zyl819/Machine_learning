@@ -1,0 +1,12 @@
+repo: sharkdp/bat
+[Regression]
+X_test_shape: (269, 38)
+y_test_size: 269
+
+[Classification]
+accuracy: 0.7780898876404494
+train_size: 1422
+test_size: 356
+positive_ratio_train: 0.8579465541490858
+positive_ratio_test: 0.7359550561797753
+
