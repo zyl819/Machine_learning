@@ -14,9 +14,6 @@ build/
 # VS Code
 .vscode/
 
-# 数据和模型
-checkpoints/
-
 # 系统文件
 .DS_Store
 Thumbs.db
