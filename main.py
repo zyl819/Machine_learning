@@ -30,26 +30,45 @@ def evaluate_classification(y_true, y_pred):
     return acc, precision, recall, f1
 
 def main(model_type):
-    # 数据加载
+    # ------------------------------------------------------
+    # 1. 数据加载与预处理
+    # ------------------------------------------------------
+    # 读取数据
     train_df = pd.read_excel("train_features.xlsx")
     test_df = pd.read_excel("test_features.xlsx")
+
+    # 定义特征列和标签列（根据实际数据调整）
+    # 排除不参与建模的列（编号、时间列等）
     exclude_cols = ['number', 'created_at', 'updated_at', 'merged_at', 'merged']
     feature_cols = [col for col in train_df.columns if col not in exclude_cols + ['is_merged', 'avg_duration_y']]
+    
+    # 回归任务标签（PR关闭时长）和分类任务标签（是否合并）
     reg_label = 'avg_duration_y'
     cls_label = 'is_merged'
+
+    # 分离特征和标签
     X_train = train_df[feature_cols].values
-    y_train_reg = train_df[reg_label].values.reshape(-1, 1)
-    y_train_cls = train_df[cls_label].values.reshape(-1, 1)
+    y_train_reg = train_df[reg_label].values.reshape(-1, 1) # 回归标签
+    y_train_cls = train_df[cls_label].values.reshape(-1, 1) # 分类标签
     X_test = test_df[feature_cols].values
     y_test_reg = test_df[reg_label].values.reshape(-1, 1)
     y_test_cls = test_df[cls_label].values.reshape(-1, 1)
+
+
+    # 特征归一化（神经网络对数值敏感）
     scaler = MinMaxScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
+
+    # 标签归一化（仅回归任务）
     reg_scaler = MinMaxScaler()
     y_train_reg_scaled = reg_scaler.fit_transform(y_train_reg)
     y_test_reg_scaled = reg_scaler.transform(y_test_reg)
+
+    # 特征维度
     input_dim = X_train.shape[1]
+
+    # 转为 torch tensor
     X_train_t = to_tensor(X_train)
     X_test_t = to_tensor(X_test)
     y_train_reg_t = to_tensor(y_train_reg_scaled)
