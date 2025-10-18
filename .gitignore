@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# VS Code
+.vscode/
+
+# 数据和模型
+checkpoints/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 环境
+.env
+*.env
+
+# 其他
+*.log
+*.tmp
+*.bak
