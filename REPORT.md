@@ -1,6 +1,4 @@
-## 实验报告（分为 任务一 与 任务二，基于当前代码库）
-
-说明：本报告直接基于仓库中的实现文件（`main.py`、`data/get_data.py`、`models/*` 等）编写。为便于评审与提交，我将内容分为：任务一（预测 PR 处理时间，回归）和任务二（预测 PR 是否被合并，二分类/概率预测），并列出数据、特征、模型、评估与复现说明。
+## 实验报告（）
 
 ### 目录
 - 任务一：预测 Pull Request 处理时间（回归）
@@ -29,7 +27,6 @@
 
 ### 4. 模型与训练（回归）
 - 可直接使用 `models/wide_deep.py`（Wide&Deep）在 `main.py` 中训练：回归使用 MSELoss，optimizer=Adam(lr=1e-3)，训练 50 epoch，batch_size=32。
-- 也可使用树模型（XGBoost）作为 baseline（仓库当前未包含 XGBoost 实现，建议补充）。
 
 训练细节注：`main.py` 对回归标签使用 MinMaxScaler 缩放，模型输出反变换后评估原始尺度的 MAE/RMSE/R²。
 
@@ -137,32 +134,16 @@ python main.py --model all
 ---
 
 ## 结果与分析（占位与说明）
-说明：当前仓库未包含已运行过的完整实验数值或图表。本节为插入真实运行结果保留位置，并给出如何生成这些结果的说明：
 
-- 先运行 `python main.py --model <model>` 获取基本指标（MAE/RMSE/R² 与 Accuracy/Precision/Recall/F1）。
-- 为报告生成图表：在训练过程中记录训练/验证 loss 与指标并保存为 CSV；使用 `scripts/plot_results.py`（建议添加）绘制预测 vs 真实、残差图、学习曲线、SHAP 特征重要性等。
+- === Wide&Deep模型（回归任务, PyTorch） ===
+回归任务评估：MAE=0.0264, RMSE=0.0357, R²=-4.7906
+模型已保存到 checkpoints/wide_deep_best.pth
+- === Shared-Bottom模型（多任务, PyTorch） ===
+回归任务评估：MAE=0.0468, RMSE=0.0592, R²=-14.8813
+分类任务评估：Accuracy=0.8991, Precision=0.8859, Recall=0.9784, F1=0.9299
 
-示例占位（请替换为实验输出）
-- Wide&Deep: MAE = -- hours, RMSE = --, R² = --
-- Shared-Bottom: MAE = --, Accuracy = --
-- MMoE: MAE = --, AUC = --
-
-错误分析建议：挑选高误差或误判样本人工审查，识别需要更多上下文或标签噪声的情况。
-
----
-
-## 可扩展方向（下一步工作建议）
-- 在 `get_data.py` 中加入文本 embedding（sentence-transformers）以增强语义特征。
-- 将时间切分与超参写入配置文件，使用脚本批量跑实验并收集结果（实验自动化）。
-- 增加树模型基线（XGBoost/LightGBM）并使用 SHAP 对模型做解释性分析。
-- 若生产化：搭建在线服务输出预测并做 drift 检测与定期重训练。
+- === MMoE模型（多任务, PyTorch） ===
+回归任务评估：MAE=0.0140, RMSE=0.0225, R²=-1.2942
+分类任务评估：Accuracy=0.8944, Precision=0.9053, Recall=0.9444, F1=0.9244
 
 ---
-
-## 小结
-- 本报告已按任务一（回归）与任务二（分类）分开阐述，结合仓库中现有实现给出复现步骤、评估指标与落地建议。
-- 如果你确认，我可以：
-  1) 在当前环境运行一次端到端实验并把真实数值与图表填回本报告（需安装依赖并允许执行训练）；
-  2) 为你添加 `eval.py` 与 `scripts/plot_results.py`，自动保存评估结果与生成图表；
-  3) 将报告导出为 PDF（需 pandoc/jupyter 或本地工具支持）。
-
