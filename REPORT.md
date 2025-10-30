@@ -34,6 +34,40 @@
   - **结论**: 改动规模与结构复杂度（目录/语言/文件类型数）对处理时长影响显著；文本中体现的“修复/测试”等意图和时间因素亦有影响。
   - **建议**: 将超大/跨多目录 PR 拆分；用更清晰的模板与测试说明；引入自动化检查减少返工。
 
+# 特征映射表（仅含代码已处理数据）
+
+
+
+| 文档特征分类             | 文档特征名       | 代码映射字段                                                 | 数据处理方式                                                 |
+| ------------------------ | ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1. 项目（Project）       | language\_num    | `language_types`                                             | 从数据集中提取`language_num`列，填充缺失值为 0               |
+|                          | change\_num      | `change_num`                                                 | 从数据集中提取`change_num`列，填充缺失值为 0                 |
+| 2. PR 作者（Author）     | experience       | `prev_PRs`                                                   | 从数据集中提取`experience`列，填充缺失值为 0                 |
+|                          | k\_coreness      | `is_core_member`                                             | 从数据集中提取`k_coreness`列，转换为 int 类型（0/1），缺失值补 0 |
+| 3. PR 评审者（Reviewer） | -                | -                                                            | 代码中未处理评审者相关特征，暂不映射                         |
+| 4. 代码变更（Change）    | directory\_num   | `directories`                                                | 从数据集中提取`directory_num`列，填充缺失值为 0              |
+|                          | language\_num    | `language_types`                                             | 从数据集中提取`language_num`列，填充缺失值为 0               |
+|                          | file\_type       | `file_types`                                                 | 从数据集中提取`file_type`列，填充缺失值为 0                  |
+|                          | has\_test        | `has_test`                                                   | 检测`title`和`body`中是否包含 "test" 关键词，转换为 int（0/1） |
+|                          | has\_feature     | `has_feature`                                                | 检测`title`和`body`中是否包含 "feature" 关键词，转换为 int（0/1） |
+|                          | has\_bug         | `has_bug`                                                    | 检测`title`和`body`中是否包含 "bug" 关键词，转换为 int（0/1） |
+|                          | has\_document    | `has_document`                                               | 检测`title`和`body`中是否包含 "document" 关键词，转换为 int（0/1） |
+|                          | has\_improve     | `has_improve`                                                | 检测`title`和`body`中是否包含 "improve" 关键词，转换为 int（0/1） |
+|                          | has\_refactor    | `has_refactor`                                               | 检测`title`和`body`中是否包含 "refactor" 关键词，转换为 int（0/1） |
+|                          | subject\_length  | `title_length`/`title_words`                                 | 分别统计`title`的长度（`title_length`）和单词数（`title_words`），缺失值补 0 |
+|                          | message\_length  | `body_length`/`body_words`                                   | 分别统计`body`的长度（`body_length`）和单词数（`body_words`），缺失值补 0 |
+|                          | lines\_added     | `lines_added`                                                | 从数据集中提取`lines_added`列，填充缺失值为 0                |
+|                          | lines\_deleted   | `lines_deleted`                                              | 从数据集中提取`lines_deleted`列，填充缺失值为 0              |
+|                          | segs\_added      | `segs_added`                                                 | 从数据集中提取`segs_added`列，填充缺失值为 0                 |
+|                          | segs\_deleted    | `segs_deleted`                                               | 从数据集中提取`segs_deleted`列，填充缺失值为 0               |
+|                          | segs\_updated    | `segs_updated`                                               | 从数据集中提取`segs_updated`列，填充缺失值为 0               |
+|                          | files\_added     | `files_added`                                                | 从数据集中提取`files_added`列，填充缺失值为 0                |
+|                          | files\_deleted   | `files_deleted`                                              | 从数据集中提取`files_deleted`列，填充缺失值为 0              |
+|                          | files\_updated   | `files_updated`                                              | 从数据集中提取`files_updated`列，填充缺失值为 0              |
+|                          | comment\_num     | `comments`                                                   | 从数据集中提取`comments`列（对应文档`comment_num`），填充缺失值为 0 |
+|                          | 时间相关衍生特征 | `created_hour`/`created_dayofweek`/`created_month`/`created_year` | 从`created_at`字段提取小时、星期、月份、年份信息，无缺失值（基于时间字段推导） |
+|                          | 基础统计特征     | `commits`/`additions`/`deletions`/`changed_files`            | 从数据集中提取对应列，填充缺失值为 0（`additions`/`deletions`可辅助反映代码变更规模） |
+
 ### 2. 任务二：预测 Pull Request 结局（是否合并，二分类）
 - **问题与数据**
   - **任务定义**: 预测 PR 是否被合并（标签 `merged` 布尔）。
